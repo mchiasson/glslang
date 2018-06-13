@@ -34,11 +34,15 @@ endif(WIN32)
 if(ENABLE_GLSLANG_INSTALL)
     if(BUILD_SHARED_LIBS)
         install(TARGETS HLSL
+                EXPORT ${targets_export_name}
                 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-                RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+                RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+                INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
     else()
         install(TARGETS HLSL
-                ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+                EXPORT ${targets_export_name}
+                ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
     endif()
 endif(ENABLE_GLSLANG_INSTALL)

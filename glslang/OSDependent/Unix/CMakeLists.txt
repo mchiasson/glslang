@@ -21,5 +21,6 @@ endif()
 
 if(ENABLE_GLSLANG_INSTALL)
     install(TARGETS OSDependent
+            EXPORT ${targets_export_name}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif(ENABLE_GLSLANG_INSTALL)
