@@ -30,6 +30,7 @@ if(BUILD_TESTING)
         glslang_set_link_args(glslangtests)
         if(ENABLE_GLSLANG_INSTALL)
             install(TARGETS glslangtests
+                    EXPORT ${targets_export_name}
                     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
         endif(ENABLE_GLSLANG_INSTALL)
 

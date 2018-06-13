@@ -40,9 +40,11 @@ endif(WIN32)
 
 if(ENABLE_GLSLANG_INSTALL)
     install(TARGETS glslangValidator
+            EXPORT ${targets_export_name}
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
     install(TARGETS spirv-remap
+            EXPORT ${targets_export_name}
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
             
     if(BUILD_SHARED_LIBS)
