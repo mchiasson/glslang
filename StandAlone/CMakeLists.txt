@@ -33,7 +33,7 @@ endif(WIN32)
 
 target_link_libraries(glslangValidator ${LIBRARIES})
 target_link_libraries(spirv-remap ${LIBRARIES})
-target_include_directories(glslangValidator PUBLIC ../External)
+target_include_directories(glslangValidator PRIVATE ../External)
 
 if(WIN32)
     source_group("Source" FILES ${SOURCES})
