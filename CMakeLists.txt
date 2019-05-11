@@ -1,6 +1,6 @@
 # increase to 3.1 once all major distributions
 # include a version of CMake >= 3.1
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.10)
 if (POLICY CMP0048)
   cmake_policy(SET CMP0048 NEW)
 endif()
@@ -145,7 +145,7 @@ endif(ENABLE_HLSL)
 add_subdirectory(gtests)
 
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
-set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+set(config_install_dir "${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME}")
 set(version_config "${generated_dir}/${PROJECT_NAME}-config-version.cmake")
 set(project_config "${generated_dir}/${PROJECT_NAME}-config.cmake")
 set(namespace "${PROJECT_NAME}::")
