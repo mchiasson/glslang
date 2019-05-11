@@ -145,7 +145,7 @@ endif(ENABLE_HLSL)
 add_subdirectory(gtests)
 
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
-set(config_install_dir "${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME}")
+set(config_install_dir "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake")
 set(version_config "${generated_dir}/${PROJECT_NAME}-config-version.cmake")
 set(project_config "${generated_dir}/${PROJECT_NAME}-config.cmake")
 set(namespace "${PROJECT_NAME}::")
