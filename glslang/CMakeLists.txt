@@ -110,8 +110,7 @@ if(ENABLE_GLSLANG_INSTALL)
                 EXPORT ${targets_export_name}
                 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-                INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
+                RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
     else()
         install(TARGETS glslang
                 EXPORT ${targets_export_name}
