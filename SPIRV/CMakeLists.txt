@@ -46,7 +46,7 @@ endif(ENABLE_NV_EXTENSIONS)
 add_library(SPIRV ${LIB_TYPE} ${SOURCES} ${HEADERS})
 set_property(TARGET SPIRV PROPERTY FOLDER glslang)
 set_property(TARGET SPIRV PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_include_directories(SPIRV PUBLIC ..)
+target_include_directories(SPIRV PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/..>)
 
 if (ENABLE_SPVREMAPPER)
     add_library(SPVRemapper ${LIB_TYPE} ${SPVREMAP_SOURCES} ${SPVREMAP_HEADERS})
@@ -62,12 +62,8 @@ if(WIN32 AND BUILD_SHARED_LIBS)
 endif()
 
 if(ENABLE_OPT)
-    target_include_directories(SPIRV
-        PRIVATE ${spirv-tools_SOURCE_DIR}/include
-        PRIVATE ${spirv-tools_SOURCE_DIR}/source
-    )
-    target_link_libraries(SPIRV glslang SPIRV-Tools-opt)
-    target_include_directories(SPIRV PUBLIC ../External)
+    target_link_libraries(SPIRV PUBLIC glslang SPIRV-Tools::SPIRV-Tools-opt)
+    target_include_directories(SPIRV PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../External>)
 else()
     target_link_libraries(SPIRV glslang)
 endif(ENABLE_OPT)
@@ -81,19 +77,23 @@ if(ENABLE_GLSLANG_INSTALL)
     if(BUILD_SHARED_LIBS)
         if (ENABLE_SPVREMAPPER)
             install(TARGETS SPVRemapper
+                    EXPORT glslangTargets
                     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
                     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
         endif()
         install(TARGETS SPIRV
+                EXPORT glslangTargets
                 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
     else()
         if (ENABLE_SPVREMAPPER)
             install(TARGETS SPVRemapper
+                    EXPORT glslangTargets
                     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
         endif()
         install(TARGETS SPIRV
+                EXPORT glslangTargets
                 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
     endif()
 

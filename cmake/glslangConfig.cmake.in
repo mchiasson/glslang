@@ -1,0 +1,6 @@
+@PACKAGE_INIT@
+
+find_package(SPIRV-Tools CONFIG REQUIRED)
+
+include("${CMAKE_CURRENT_LIST_DIR}/glslangTargets.cmake")
+check_required_components("glslang")
