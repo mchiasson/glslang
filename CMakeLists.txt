@@ -1,6 +1,6 @@
 # increase to 3.1 once all major distributions
 # include a version of CMake >= 3.1
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.1)
 if (POLICY CMP0048)
   cmake_policy(SET CMP0048 NEW)
 endif()
@@ -62,7 +62,13 @@ macro(glslang_pch SRCS PCHCPP)
   endif()
 endmacro(glslang_pch)
 
-project(glslang)
+include(cmake/Hunter/HunterGate.cmake)
+HunterGate(
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.216.tar.gz"
+    SHA1 "a492a1879bee60c29f7af17ef56b45f0d7766241"
+    LOCAL
+)
+project(glslang VERSION 7.12.3352)
 # make testing optional
 include(CTest)
 
@@ -157,11 +163,11 @@ if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/External)
 endif()
 
 # We depend on these for later projects, so they should come first.
+hunter_add_package(GTest)
+hunter_add_package(SPIRV-Tools)
+find_package(GMock CONFIG REQUIRED)
+find_package(SPIRV-Tools CONFIG REQUIRED)
 add_subdirectory(External)
-
-if(NOT TARGET SPIRV-Tools-opt)
-    set(ENABLE_OPT OFF)
-endif()
 
 if(ENABLE_OPT)
     message(STATUS "optimizer enabled")
@@ -183,3 +189,23 @@ if(ENABLE_HLSL)
     add_subdirectory(hlsl)
 endif(ENABLE_HLSL)
 add_subdirectory(gtests)
+
+set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
+set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/glslang")
+set(version_config "${generated_dir}/glslangConfigVersion.cmake")
+set(project_config "${generated_dir}/glslangConfig.cmake")
+
+include(CMakePackageConfigHelpers)
+
+write_basic_package_version_file(${version_config}
+    VERSION ${PACKAGE_VERSION}
+    COMPATIBILITY SameMajorVersion)
+
+configure_package_config_file(cmake/glslangConfig.cmake.in ${project_config}
+    INSTALL_DESTINATION "${config_install_dir}")
+
+install(FILES ${project_config}
+              ${version_config}
+        DESTINATION "${config_install_dir}")
+
+install(EXPORT glslangTargets NAMESPACE glslang:: DESTINATION ${config_install_dir})

@@ -1,5 +1,5 @@
 if(BUILD_TESTING)
-    if(TARGET gmock)
+    if(TARGET GMock::main)
         message(STATUS "Google Mock found - building tests")
 
         set(TEST_SOURCES
@@ -32,6 +32,7 @@ if(BUILD_TESTING)
         glslang_set_link_args(glslangtests)
         if(ENABLE_GLSLANG_INSTALL)
             install(TARGETS glslangtests
+                    EXPORT glslangTargets
                     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
         endif(ENABLE_GLSLANG_INSTALL)
 
@@ -43,9 +44,7 @@ if(BUILD_TESTING)
                                    PRIVATE GLSLANG_TEST_DIRECTORY="${GLSLANG_TEST_DIRECTORY}")
         target_include_directories(glslangtests PRIVATE
                                    ${CMAKE_CURRENT_SOURCE_DIR}
-                                   ${PROJECT_SOURCE_DIR}
-                                   ${gmock_SOURCE_DIR}/include
-                                   ${gtest_SOURCE_DIR}/include)
+                                   ${PROJECT_SOURCE_DIR})
 
         set(LIBRARIES
             SPVRemapper glslang OSDependent OGLCompiler glslang
@@ -53,7 +52,7 @@ if(BUILD_TESTING)
         if(ENABLE_HLSL)
             set(LIBRARIES ${LIBRARIES} HLSL)
         endif(ENABLE_HLSL)
-        target_link_libraries(glslangtests PRIVATE ${LIBRARIES} gmock)
+        target_link_libraries(glslangtests PRIVATE ${LIBRARIES} GMock::main)
 
         add_test(NAME glslang-gtests
                  COMMAND glslangtests --test-root "${GLSLANG_TEST_DIRECTORY}")

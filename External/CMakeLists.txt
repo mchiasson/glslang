@@ -2,7 +2,7 @@
 set_property(DIRECTORY APPEND PROPERTY COMPILE_OPTIONS -w)
 
 if(BUILD_TESTING)
-    if(TARGET gmock)
+    if(TARGET GMock::main)
         message(STATUS "Google Mock already configured - use it")
     elseif(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/googletest)
         # We need to make sure Google Test does not mess up with the
@@ -34,11 +34,3 @@ if(BUILD_TESTING)
             "Google Mock was not found - tests based on that will not build")
     endif()
 endif()
-
-if(ENABLE_OPT AND NOT TARGET SPIRV-Tools-opt)
-    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/spirv-tools)
-        set(SPIRV_SKIP_TESTS ON CACHE BOOL "Skip building SPIRV-Tools tests")
-        add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/spirv-tools spirv-tools)
-    endif()
-endif()
-
