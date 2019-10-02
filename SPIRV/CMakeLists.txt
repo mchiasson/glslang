@@ -66,8 +66,7 @@ if(ENABLE_OPT)
         PRIVATE ${spirv-tools_SOURCE_DIR}/include
         PRIVATE ${spirv-tools_SOURCE_DIR}/source
     )
-    target_link_libraries(SPIRV glslang SPIRV-Tools-opt)
-    target_include_directories(SPIRV PUBLIC ../External)
+    target_link_libraries(SPIRV glslang SPIRV-Tools::SPIRV-Tools-opt)
 else()
     target_link_libraries(SPIRV glslang)
 endif(ENABLE_OPT)

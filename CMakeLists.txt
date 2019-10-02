@@ -1,6 +1,6 @@
 # increase to 3.1 once all major distributions
 # include a version of CMake >= 3.1
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.2)
 if (POLICY CMP0048)
   cmake_policy(SET CMP0048 NEW)
 endif()
@@ -62,7 +62,17 @@ macro(glslang_pch SRCS PCHCPP)
   endif()
 endmacro(glslang_pch)
 
-project(glslang)
+include(cmake/HunterGate.cmake)
+HunterGate(
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.218.tar.gz"
+    SHA1 "9a3594a61227967fb92159339ba326701b287b19"
+)
+
+project(glslang VERSION 7.12.3352)
+
+hunter_add_package(SPIRV-Tools)
+find_package(SPIRV-Tools CONFIG REQUIRED)
+
 # make testing optional
 include(CTest)
 
@@ -159,7 +169,7 @@ endif()
 # We depend on these for later projects, so they should come first.
 add_subdirectory(External)
 
-if(NOT TARGET SPIRV-Tools-opt)
+if(NOT TARGET SPIRV-Tools::SPIRV-Tools-opt)
     set(ENABLE_OPT OFF)
 endif()
 
@@ -173,7 +183,7 @@ else()
     add_definitions(-DENABLE_OPT=0)
 endif()
 
-set(targets_export_name "${PROJECT_NAME}-targets")
+set(targets_export_name "${PROJECT_NAME}Targets")
 
 add_subdirectory(glslang)
 add_subdirectory(OGLCompilersDLL)
@@ -188,13 +198,12 @@ add_subdirectory(gtests)
 
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
 set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
-set(version_config "${generated_dir}/${PROJECT_NAME}-config-version.cmake")
-set(project_config "${generated_dir}/${PROJECT_NAME}-config.cmake")
+set(version_config "${generated_dir}/${PROJECT_NAME}ConfigVersion.cmake")
+set(project_config "${generated_dir}/${PROJECT_NAME}Config.cmake")
 set(namespace "${PROJECT_NAME}::")
-set(project_version "7.7.2767")
 
 include(CMakePackageConfigHelpers)
-write_basic_package_version_file("${version_config}" VERSION "${project_version}" COMPATIBILITY SameMajorVersion)
+write_basic_package_version_file("${version_config}" VERSION "${PACKAGE_VERSION}" COMPATIBILITY AnyNewerVersion)
 configure_package_config_file("cmake/config.cmake.in" "${project_config}" INSTALL_DESTINATION "${config_install_dir}")
 install(FILES "${project_config}" "${version_config}" DESTINATION "${config_install_dir}")
 install(EXPORT "${targets_export_name}" NAMESPACE "${namespace}" DESTINATION "${config_install_dir}")
